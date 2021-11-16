@@ -32,4 +32,3 @@ Experiments can be started by running the `job_trimodal` script.
 ```bash
 bash job_trimodal
 ```
-# BraVL
