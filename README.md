@@ -6,7 +6,7 @@ This is the official code for the paper "BraVL: Multimodal Zero-Shot Neural Deco
 This code was developed and tested with:
 - Python version 3.7.0
 - PyTorch version 1.9.0
-- CUDA version 11.0
+- CUDA version 11.2
 - The conda environment defined in `environment.yml`
 
 First, set up the conda enviroment as follows:
