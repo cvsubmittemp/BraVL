@@ -1,7 +1,5 @@
 # BraVL
-This is the official code for the paper "BraVL: Multimodal Zero-Shot Neural Decoding by Joint Learning Brain-Visual-Linguistic Representations".
-
-If you have any questions about the code or the paper, we are happy to help!
+This is the official code for the paper "BraVL: Multimodal Zero-Shot Neural Decoding by Joint Learning Brain-Visual-Linguistic Representations" submitted to CVPR 2022.
 
 ## Preliminaries
 
@@ -16,12 +14,13 @@ First, set up the conda enviroment as follows:
 conda env create -f environment.yml  # create conda env
 conda activate BraVL                # activate conda env
 ```
-
-Second, download the data from https://figshare.com/articles/dataset/BraVL/17024591, unzip them, and put them at "./data" directory:
+## Download the pre-processed trimodal data
+Second, download the pre-processed trimodal data from https://figshare.com/articles/dataset/BraVL/17024591, unzip them, and put them at "./data" directory:
 ```bash
 unzip DIR-Wiki.zip -d data/
 unzip GOD-Wiki.zip -d data/
 ```
+Note that, the raw (image and brain fMRI) trimodal data are not included because they are too large. Raw ImageNet images and brain fMRI data can be downloaded from the corresponding official site. We provide python scripts for feature extraction and data preprocessing.
 
 ## Experiments
 
@@ -32,3 +31,5 @@ Experiments can be started by running the `job_trimodal` script.
 ```bash
 bash job_trimodal
 ```
+
+If you have any questions about the code or the paper, we are happy to help!
