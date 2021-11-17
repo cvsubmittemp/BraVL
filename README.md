@@ -14,13 +14,13 @@ First, set up the conda enviroment as follows:
 conda env create -f environment.yml  # create conda env
 conda activate BraVL                # activate conda env
 ```
-## Download the pre-processed trimodal data
+## Download data
 Second, download the pre-processed trimodal data from https://figshare.com/articles/dataset/BraVL/17024591, unzip them, and put them at "./data" directory:
 ```bash
 unzip DIR-Wiki.zip -d data/
 unzip GOD-Wiki.zip -d data/
 ```
-Note that, the raw (image and brain fMRI) trimodal data are not included because they are too large. Raw ImageNet images and brain fMRI data can be downloaded from the corresponding official site. We provide python scripts for feature extraction and data preprocessing.
+Note that, the raw (image and brain fMRI) data are not included here because they are too large. Raw ImageNet images and brain fMRI data can be downloaded from the corresponding official site. We provide python scripts for feature extraction and data preprocessing.
 
 ## Experiments
 
