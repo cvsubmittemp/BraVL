@@ -480,7 +480,7 @@ def train_aug(epoch, exp, tb_logger):
             elbo_nega_sample_loss = elbo_nega_sample_loss_case_1 + elbo_nega_sample_loss_case_2
             inter_mi_loss = elbo_loss + elbo_nega_sample_loss/2.0
 
-            total_loss = total_loss + lambda2 * torch.nn.functional.relu(exp.flags.margin-(-inter_mi_loss))
+            total_loss = total_loss + lambda2 * inter_mi_loss
             total_loss.backward()
             exp.optimizer['mvae'].step()
             print('====> Epoch: {:03d} Train loss: {:.4f}'.format(epoch, total_loss))
@@ -586,7 +586,7 @@ def train(epoch, exp, tb_logger):
         elbo_nega_sample_loss = elbo_nega_sample_loss_case_1 + elbo_nega_sample_loss_case_2
         inter_mi_loss = elbo_loss + elbo_nega_sample_loss/2.0
 
-        total_loss = total_loss + lambda2 * torch.nn.functional.relu(exp.flags.margin-(-inter_mi_loss))
+        total_loss = total_loss + lambda2 * inter_mi_loss
         total_loss.backward()
         exp.optimizer['mvae'].step()
 
@@ -645,7 +645,7 @@ def train(epoch, exp, tb_logger):
 
         elbo_nega_sample_loss = elbo_nega_sample_loss_case_1 + elbo_nega_sample_loss_case_2 + elbo_nega_sample_loss_case_3 + elbo_nega_sample_loss_case_4 + elbo_nega_sample_loss_case_5 + elbo_nega_sample_loss_case_6
         inter_mi_loss = elbo_loss + elbo_nega_sample_loss/6.0
-        total_loss = total_loss + lambda2 * torch.nn.functional.relu(exp.flags.margin-(-inter_mi_loss))
+        total_loss = total_loss + lambda2 * inter_mi_loss
         total_loss.backward()
         exp.optimizer['mvae'].step()
 
@@ -706,7 +706,7 @@ def test(epoch, exp, tb_logger):
 
             elbo_nega_sample_loss = elbo_nega_sample_loss_case_1 + elbo_nega_sample_loss_case_2 + elbo_nega_sample_loss_case_3 + elbo_nega_sample_loss_case_4 + elbo_nega_sample_loss_case_5 + elbo_nega_sample_loss_case_6
             inter_mi_loss = elbo_loss + elbo_nega_sample_loss / 6.0
-            total_loss = total_loss + lambda2 * torch.nn.functional.relu(exp.flags.margin-(-inter_mi_loss))
+            total_loss = total_loss + lambda2 * inter_mi_loss
             tb_logger.write_testing_logs(results, total_loss, log_probs, klds, -inter_mi_loss)
             print('====> Epoch: {:03d} Test loss: {:.4f} ELBO: {:.4f} IntraMI: {:.4f} InterMI: {:.4f}'.format(epoch,
                                                                                                            total_loss,
