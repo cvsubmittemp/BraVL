@@ -5,7 +5,7 @@ import os
 import torch
 import torch.nn as nn
 from torch.autograd import Variable
-
+import torch.distributions as dist
 from divergence_measures.mm_div import calc_alphaJSD_modalities
 from divergence_measures.mm_div import calc_group_divergence_moe
 from divergence_measures.mm_div import poe
