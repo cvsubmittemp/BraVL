@@ -1,5 +1,5 @@
 # BraVL
-This is the official code for the paper "BraVL: Multimodal Zero-Shot Neural Decoding by Joint Learning Brain-Visual-Linguistic Representations" submitted to CVPR 2022.
+This is the official code for the paper "Beyond the Eye: Decoding Visual Neural Representations by Multimodal Learning of Brain-Visual-Linguistic Features".
 
 ## Preliminaries
 
