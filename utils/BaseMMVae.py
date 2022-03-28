@@ -137,13 +137,17 @@ class BaseMMVae(ABC, nn.Module):
         return True;
 
 
-    def forward(self, input_batch):
+   def forward(self, input_batch,K=1):
         latents = self.inference(input_batch);
         results = dict();
         results['latents'] = latents;
         results['group_distr'] = latents['joint'];
         class_embeddings = self.reparameterize(latents['joint'][0],
                                                 latents['joint'][1]);
+        #### For CUBO ####
+        qz_x = dist.Normal(latents['joint'][0],latents['joint'][1].mul(0.5).exp_())
+        zss = qz_x.rsample(torch.Size([K]))
+
         div = self.calc_joint_divergence(latents['mus'],
                                          latents['logvars'],
                                          latents['weights']);
@@ -151,6 +155,7 @@ class BaseMMVae(ABC, nn.Module):
             results[key] = div[key];
 
         results_rec = dict();
+        px_zs = dict();
         enc_mods = latents['modalities'];
         for m, m_key in enumerate(self.modalities.keys()):
             if m_key in input_batch.keys():
@@ -160,9 +165,14 @@ class BaseMMVae(ABC, nn.Module):
                 else:
                     m_s_embeddings = None;
                 m_rec = self.lhoods[m_key](*self.decoders[m_key](m_s_embeddings, class_embeddings));
+                px_z = self.lhoods[m_key](*self.decoders[m_key](m_s_embeddings, zss));
                 results_rec[m_key] = m_rec;
+                px_zs[m_key] = px_z
         results['rec'] = results_rec;
         results['class_embeddings'] = class_embeddings
+        results['qz_x'] = qz_x
+        results['zss'] = zss
+        results['px_zs'] = px_zs
         return results;
 
     def encode(self, input_batch):
