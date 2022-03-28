@@ -3,6 +3,7 @@ import numpy as np
 import random
 import torch
 from torch.autograd import Variable
+import torch.distributions as dist
 from tensorboardX import SummaryWriter
 from torch.utils.data import DataLoader
 from divergence_measures.kl_div import calc_kl_divergence
@@ -28,7 +29,22 @@ if SEED is not None:
     torch.manual_seed(SEED)
     random.seed(SEED)
 
+def log_mean_exp(value, dim=0, keepdim=False):
+    return torch.logsumexp(value, dim, keepdim=keepdim) - math.log(value.size(dim))
 
+def m_cubo( x, qz_x, px_zs, zss):
+    lpz = dist.Normal(torch.zeros(1,zss.size(2)).cuda(),torch.ones(1,zss.size(2)).cuda()).log_prob(zss).sum(-1)
+    lqz_x = qz_x.log_prob(zss).sum(-1)
+    if 'brain' in px_zs.keys() and 'image' in px_zs.keys() and 'text' in px_zs.keys():
+        lpx_z1 = px_zs['image'].log_prob(x['image']).sum(-1)
+        lpx_z2 = px_zs['text'].log_prob(x['text']).sum(-1)
+        lpx_z3 = px_zs['brain'].log_prob(x['brain']).sum(-1)
+        cubo = 0.5*log_mean_exp(2*(lpz+lpx_z1+lpx_z2+lpx_z3-lqz_x))
+    elif 'brain' not in px_zs.keys() and 'image' in px_zs.keys() and 'text' in px_zs.keys():
+        lpx_z1 = px_zs['image'].log_prob(x['image']).sum(-1)
+        lpx_z2 = px_zs['text'].log_prob(x['text']).sum(-1)
+        cubo = 0.5*log_mean_exp(2*(lpz+lpx_z1+lpx_z2-lqz_x))
+    return cubo.mean()
 
 def log_li(x_var, dist_info):
     mean   = dist_info[0]
@@ -343,7 +359,8 @@ def elbo_contrast(exp, batch, epoch):
     mods = exp.modalities
     for k, m_key in enumerate(batch_d.keys()):
         batch_d[m_key] = Variable(batch_d[m_key]).to(exp.flags.device)
-    results = mm_vae(batch_d)
+    results = mm_vae(batch_d, K=30)
+    cubo = m_cubo(batch_d, results['qz_x'], results['px_zs'], results['zss'])
 
     log_probs, weighted_log_prob = calc_log_probs(exp, results, batch)
     group_divergence = results['joint_divergence']
@@ -420,7 +437,7 @@ def elbo_contrast(exp, batch, epoch):
         elbos['joint'] = elbo_joint
         elbo_loss = sum(elbos.values())
 
-    elbo_scale = - elbo_loss / CONSTANT
+    elbo_scale = cubo / CONSTANT
     out_basic_routine = dict()
     out_basic_routine['elbo_nega_sample_loss'] = torch.log(elbo_scale.exp().sum() * exp.flags.batch_size / neg_batch_size + TINY) * CONSTANT
     return out_basic_routine
