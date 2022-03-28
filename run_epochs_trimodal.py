@@ -817,8 +817,7 @@ def run_classification_test(exp,observation, type):
         tsne = TSNE()
         X_embedded = tsne.fit_transform(X)
         sns.scatterplot(X_embedded[:, 0], X_embedded[:, 1], hue=sgn, style=sgn, legend='brief', palette=palette)
-        path = './results/' + exp.flags.dataname + '_' + exp.flags.sbj + '_' + exp.flags.roi + '_' + exp.flags.aug_type + '_' + exp.flags.text_model + '_' + exp.flags.image_model.split('/')[-1] + '_' + str(exp.flags.lambda1) + '_' + str(exp.flags.lambda2) + '_' + str(
-            exp.flags.margin) + '_' + str(exp.flags.class_dim) + '_' + exp.flags.method
+        path = './results/' + exp.flags.dataname + '_' + exp.flags.sbj + '_' + exp.flags.roi + '_' + exp.flags.aug_type + '_' + exp.flags.text_model + '_' + exp.flags.image_model.split('/')[-1] + '_' + str(exp.flags.lambda1) + '_' + str(exp.flags.lambda2) + '_' + str(exp.flags.class_dim) + '_' + exp.flags.method
         plt.savefig(path+'_brain_vs_brain_rec.pdf',dpi=500)
 
     elif observation == 'image':
@@ -907,6 +906,6 @@ def run_epochs_trimodal(exp):
         top1, top5 = run_classification_test(exp,'image_text', 'normal')
     elif exp.flags.test_type=='zsl':
         top1, top5 = run_classification_test(exp, 'image_text', 'zsl')
-        path = './results/'+exp.flags.dataname+'_'+exp.flags.sbj+'_'+exp.flags.roi+'_'+exp.flags.aug_type+'_'+exp.flags.text_model+'_'+exp.flags.image_model.split('/')[-1]+'_'+str(exp.flags.lambda1)+'_'+str(exp.flags.lambda2)+'_'+str(exp.flags.margin)+'_'+str(exp.flags.class_dim)+'_'+exp.flags.method+'_image_text.csv'
+        path = './results/'+exp.flags.dataname+'_'+exp.flags.sbj+'_'+exp.flags.roi+'_'+exp.flags.aug_type+'_'+exp.flags.text_model+'_'+exp.flags.image_model.split('/')[-1]+'_'+str(exp.flags.lambda1)+'_'+str(exp.flags.lambda2)+'_'+'_'+str(exp.flags.class_dim)+'_'+exp.flags.method+'_image_text.csv'
         create_csv(path, top1, top5)
         write_csv(path, top1, top5)
