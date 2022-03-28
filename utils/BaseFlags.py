@@ -44,7 +44,7 @@ parser.add_argument('--beta_style', type=float, default=1.0, help="default weigh
 parser.add_argument('--beta_content', type=float, default=1.0, help="default weight of sum of weighted content divergence terms")
 parser.add_argument('--lambda1', type=float, default=0.001, help="default weight of intra_mi terms")
 parser.add_argument('--lambda2', type=float, default=0.001, help="default weight of inter_mi terms")
-parser.add_argument('--margin', type=float, default=20000, help="default margin of inter_mi terms")
+
 
 FLAGS = parser.parse_args()
 data_dir_root = os.path.join('./data', FLAGS.dataname)
