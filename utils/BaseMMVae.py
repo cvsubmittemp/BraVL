@@ -137,7 +137,7 @@ class BaseMMVae(ABC, nn.Module):
         return True;
 
 
-   def forward(self, input_batch,K=1):
+    def forward(self, input_batch,K=1):
         latents = self.inference(input_batch);
         results = dict();
         results['latents'] = latents;
